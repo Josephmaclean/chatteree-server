@@ -5,7 +5,6 @@ from app.api import deps
 from app.controllers import user_controller
 from app.schemas import user_schema
 
-# user_model.Base.metadata.create_all(bind=engine)
 router = APIRouter()
 
 

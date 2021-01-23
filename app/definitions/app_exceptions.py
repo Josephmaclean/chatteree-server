@@ -18,18 +18,23 @@ class AppExceptionCase(Exception):
 async def app_exception_handler(request: Request, exc: AppExceptionCase):
     return JSONResponse(
         status_code=exc.status_code,
-        content={
-            "app_exception": exc.exception_case,
-            "context": exc.context
-        }
+        content={"app_exception": exc.exception_case, "context": exc.context},
     )
 
 
 class AppException(object):
-    class CreateUser(AppExceptionCase):
+    class CreateResource(AppExceptionCase):
         def __init__(self, context: dict = None):
             """
             User Creation Failed
             """
             status_code = 500
+            AppExceptionCase.__init__(self, status_code, context)
+
+    class ResourceExists(AppExceptionCase):
+        def __init__(self, context: dict = None):
+            """
+            User Creation Failed
+            """
+            status_code = 422
             AppExceptionCase.__init__(self, status_code, context)

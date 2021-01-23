@@ -4,6 +4,9 @@
     "cSpell.words": [
         "chatteree",
         "deps",
+        "getenv",
+        "myapp",
+        "mymodel",
         "starlette"
     ]
 }

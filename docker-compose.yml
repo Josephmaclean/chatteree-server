@@ -1,0 +1,26 @@
+version: "2"
+
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: chatteree.dockerfile
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+
+  postgres:
+    image: postgres:12
+    networks:
+      - app-network
+
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=zx1tt2qdd77ixq@
+      - POSTGRES_DB=chatteree
+
+networks:
+  app-network:
+    driver: bridge

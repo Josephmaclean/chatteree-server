@@ -2,7 +2,7 @@ version: "2"
 
 services:
   web:
-    build: 
+    build:
       context: .
       dockerfile: chatteree.dockerfile
     ports:
@@ -16,7 +16,7 @@ services:
     networks:
       - app-network
 
-    environment: 
+    environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=zx1tt2qdd77ixq@
       - POSTGRES_DB=chatteree

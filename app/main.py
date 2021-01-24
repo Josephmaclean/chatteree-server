@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from app.api.routes import users
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHttpException
-from app.definitions.app_exceptions import *
+from app.definitions.app_exceptions import app_exception_handler, AppExceptionCase
 
 
 app = FastAPI()

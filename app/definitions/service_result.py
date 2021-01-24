@@ -1,6 +1,6 @@
 import inspect
 from loguru import logger
-from .app_exceptions import *
+from .app_exceptions import AppExceptionCase
 
 
 class ServiceResult(object):

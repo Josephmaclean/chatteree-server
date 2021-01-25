@@ -21,6 +21,11 @@ services:
       - POSTGRES_PASSWORD=zx1tt2qdd77ixq@
       - POSTGRES_DB=chatteree
 
+  redis:
+    image: redis:latest
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge

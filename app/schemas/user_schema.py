@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 # Shared properties
@@ -11,6 +11,14 @@ class UserBase(BaseModel):
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):
+    # email: str = Field(max_length=)
+    username: str = Field(
+        min_length=2, description="length of username should be greater than 2"
+    )
+
+
+class ConfirmOtp(BaseModel):
+    email: str
     otp_code: str
 
 

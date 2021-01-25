@@ -1,13 +1,16 @@
+import time
+import random
 from starlette.exceptions import HTTPException
-from app.schemas.user_schema import UserCreate
+from app.schemas.user_schema import UserCreate, ConfirmOtp
 from app.controllers.main import AppController
 from app.definitions.service_result import ServiceResult
 from app.repositories.user_repository import UserRepository
 from app.definitions.app_exceptions import AppException
+from app.services.email_service import EmailService
 
 
 class UserController(AppController):
-    def create_user(self, user: UserCreate) -> ServiceResult:
+    async def create_user(self, user: UserCreate) -> ServiceResult:
         user_repository = UserRepository(self.db)
 
         db_user = user_repository.get_user_by_email(user.email)
@@ -20,4 +23,30 @@ class UserController(AppController):
         user = user_repository.create_user(user)
         if not user:
             return ServiceResult(AppException.CreateResource())
-        return user
+
+        message = f"your one time pin is {user.otp_code}"
+        email = user.email
+        subject = "Please confirm your email address"
+
+        self.background_tasks.add_task(self.send_mail, email, subject, message)
+
+        return ServiceResult(user)
+
+    def send_mail(self, email, subject, message):
+        EmailService().send_mail(email, subject, message)
+
+    def confirm_user(self, data: ConfirmOtp):
+        db_user = UserRepository(self.db).get_user_by_email(data.email)
+
+        if not db_user:
+            return ServiceResult(
+                AppException.ResourceDoesNotExist(
+                    context={"success": False, "message": "user does not exist"}
+                )
+            )
+        otp_code = db_user.otp_code
+        if otp_code == data.otp_code:
+            UserRepository(self.db).edit_user(data.email)
+            return ServiceResult(db_user)
+        else:
+            ServiceResult(AppException.Unauthorized(context={"message": "Wrong code"}))

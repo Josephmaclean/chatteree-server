@@ -4,6 +4,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+from app.config import settings
 from app.db import Base
 from app.models import user_model
 
@@ -26,11 +27,11 @@ target_metadata = Base.metadata
 def get_url():
     # from app.config import settings
 
-    # user = settings.POSTGRES_USER
-    # password = settings.POSTGRES_PASSWORD
-    # server = settings.POSTGRES_SERVER
-    # db = settings.POSTGRES_DB
-    return "postgresql://postgres:zx1tt2qdd77ixq@@localhost:5432/chatteree"
+    user = settings.POSTGRES_USER
+    password = settings.POSTGRES_PASSWORD
+    server = settings.POSTGRES_SERVER
+    db_name = settings.POSTGRES_DB
+    return f"postgresql://{user}:{password}@{server}:5432/{db_name}"
 
 
 def run_migrations_offline():

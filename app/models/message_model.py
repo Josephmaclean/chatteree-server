@@ -17,10 +17,12 @@ class Message(Base):
     __tablename__ = "messages"
 
     id = Column(Integer, primary_key=True, index=True)
-    type = Column(Enum(MessageTypes), default=MessageTypes.text, nullable=False)
+    type = Column(
+        Enum(MessageTypes), default=MessageTypes.text, nullable=False, index=True
+    )
     content = Column(String, nullable=False)
     sender_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=sql.func.now())
     deleted_at = Column(DateTime(timezone=True))
 
-    sender = relationship("User", back_populates="messages")
+    sender = relationship("User")

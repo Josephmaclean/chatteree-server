@@ -7,9 +7,6 @@ from app.models import user_model
 class UserRepository(AppRepository):
     __instance = None
 
-    # def __init__(self):
-    #     super(UserRepository, self).__init__(db)
-
     def create_user(self, user: UserCreate) -> User:
         otp_code = str(random.randint(100000, 999999))
         otp_code = otp_code

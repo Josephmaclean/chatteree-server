@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Table, ForeignKey
+from sqlalchemy import Column, String, Integer, Table, ForeignKey, Boolean, DateTime, sql
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
@@ -16,4 +16,7 @@ class ChatRoom(Base):
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     description = Column(String)
     image = Column(String)
+    is_group_chat = Column(Boolean, nullable=False, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=sql.func.now())
+
     users = relationship("User", secondary=association_table, backref="chatrooms")

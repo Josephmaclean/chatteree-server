@@ -22,7 +22,9 @@ class Message(Base):
     )
     content = Column(String, nullable=False)
     sender_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    chatroom_id = Column(Integer, ForeignKey("chatrooms.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=sql.func.now())
     deleted_at = Column(DateTime(timezone=True))
 
     sender = relationship("User")
+    chatroom = relationship("ChatRoom")

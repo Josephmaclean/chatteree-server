@@ -7,6 +7,7 @@ from alembic import context
 from app.config import settings
 from app.db import Base
 from app.models import user_model
+from app.models import message_model
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -27,10 +28,10 @@ target_metadata = Base.metadata
 def get_url():
     # from app.config import settings
 
-    user = settings.POSTGRES_USER
-    password = settings.POSTGRES_PASSWORD
-    server = settings.POSTGRES_SERVER
-    db_name = settings.POSTGRES_DB
+    user = settings.db_user
+    password = settings.db_password
+    server = settings.db_server
+    db_name = settings.db_name
     return f"postgresql://{user}:{password}@{server}:5432/{db_name}"
 
 

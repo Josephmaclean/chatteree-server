@@ -3,14 +3,18 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    db_server: str
-    db_user: str
-    db_password: str
-    db_name: str
-    sendgrid_api_key: str
+    DB_SERVER: str
+    DB_USER: str
+    DB_PASSWORD: str
+    DB_NAME: str
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    SENDGRID_API_KEY: str
 
     class Config:
         env_file = ".env"
+        case_sensitive = True
 
 
 settings = Settings()

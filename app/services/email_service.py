@@ -22,7 +22,7 @@ class EmailService(EmailServiceInterface):
         )
 
         try:
-            sg = SendGridAPIClient(settings.sendgrid_api_key)
+            sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
             response = sg.send(message)
             print(response)
         except Exception as e:

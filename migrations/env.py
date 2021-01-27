@@ -29,10 +29,10 @@ target_metadata = Base.metadata
 def get_url():
     # from app.config import settings
 
-    user = settings.db_user
-    password = settings.db_password
-    server = settings.db_server
-    db_name = settings.db_name
+    user = settings.DB_USER
+    password = settings.DB_PASSWORD
+    server = settings.DB_SERVER
+    db_name = settings.DB_NAME
     return f"postgresql://{user}:{password}@{server}:5432/{db_name}"
 
 

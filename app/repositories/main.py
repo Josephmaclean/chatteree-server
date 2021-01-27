@@ -34,11 +34,12 @@ class BaseRepository(DBSessionContext):
 
     def find_by_id(self, id: int) -> ModelType:
         """
-        returns user if it exists in the database
+        returns a user if it exists in the database
         :param id: int - id of the user
         :return:
         """
-        return self.db.query(self.model).filter(id == id).first()
+        user = self.db.query(self.model).get(id)
+        return user
 
     def update_by_id(
         self, id: int, obj_in: Union[SchemaType, Dict[str, Any]]

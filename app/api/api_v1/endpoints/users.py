@@ -23,7 +23,7 @@ async def create_user(
 
 @router.post("/confirm_otp", response_model=user_schema.User)
 async def confirm_otp(
-    data: user_schema.ConfirmOtp, db: Session = Depends(dependency=deps.get_db)
+    data: user_schema.UserConfirmOtp, db: Session = Depends(dependency=deps.get_db)
 ):
     result = UserController(db).confirm_user(data)
     return handle_result(result)

@@ -1,7 +1,8 @@
 import time
 import random
+from fastapi.encoders import jsonable_encoder
 from starlette.exceptions import HTTPException
-from app.schemas.user_schema import UserCreate, ConfirmOtp
+from app.schemas.user_schema import UserCreate, UserConfirmOtp
 from app.controllers.main import AppController
 from app.definitions.service_result import ServiceResult
 from app.repositories.user_repository import UserRepository
@@ -13,16 +14,15 @@ class UserController(AppController):
     async def create_user(self, user: UserCreate) -> ServiceResult:
         user_repository = UserRepository(self.db)
 
+        token = random.randint(100000, 999999)
         db_user = user_repository.get_user_by_email(user.email)
         if db_user:
-            return ServiceResult(
-                AppException.ResourceExists(
-                    context={"success": False, "message": "User already exists"}
-                )
-            )
-        user = user_repository.create(user)
-        if not user:
-            return ServiceResult(AppException.CreateResource())
+            user_repository.update_by_id(db_user.id, {"otp_code": token})
+            return ServiceResult(db_user)
+
+        obj_data = jsonable_encoder(user)
+        obj_data["otp_code"] = token
+        user = user_repository.create(obj_data)
 
         message = f"your one time pin is {user.otp_code}"
         email = user.email
@@ -35,8 +35,8 @@ class UserController(AppController):
     def send_mail(self, email, subject, message):
         EmailService().send_mail(email, subject, message)
 
-    def confirm_user(self, data: ConfirmOtp):
-        db_user = UserRepository(self.db).get_user_by_email(data.email)
+    def confirm_user(self, data: UserConfirmOtp):
+        db_user = UserRepository(self.db).find_by_id(data.id)
 
         if not db_user:
             return ServiceResult(

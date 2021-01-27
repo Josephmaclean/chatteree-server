@@ -23,8 +23,8 @@ class UserUpdate(UserBase):
     )
 
 
-class ConfirmOtp(BaseModel):
-    email: EmailStr
+class UserConfirmOtp(BaseModel):
+    id: int
     otp_code: str
 
 

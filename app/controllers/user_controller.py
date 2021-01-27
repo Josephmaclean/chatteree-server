@@ -20,7 +20,7 @@ class UserController(AppController):
                     context={"success": False, "message": "User already exists"}
                 )
             )
-        user = user_repository.create_user(user)
+        user = user_repository.create(user)
         if not user:
             return ServiceResult(AppException.CreateResource())
 

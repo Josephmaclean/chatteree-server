@@ -5,9 +5,7 @@ from app.controllers.user_controller import UserController
 from app.schemas import user_schema
 from app.definitions.service_result import handle_result
 
-router = APIRouter(
-    prefix="/user", tags=["users"], responses={404: {"description": "not found"}}
-)
+router = APIRouter()
 
 
 @router.post("/", response_model=user_schema.User)

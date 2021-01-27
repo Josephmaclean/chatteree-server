@@ -46,7 +46,11 @@ class UserController(AppController):
             )
         otp_code = db_user.otp_code
         if otp_code == data.otp_code:
-            UserRepository(self.db).edit_user(data.email)
+            UserRepository(self.db).update_by_id(
+                db_user.id, {"otp_code": "", "is_active": True}
+            )
             return ServiceResult(db_user)
         else:
-            ServiceResult(AppException.Unauthorized(context={"message": "Wrong code"}))
+            return ServiceResult(
+                AppException.Unauthorized(context={"message": "Wrong code"})
+            )

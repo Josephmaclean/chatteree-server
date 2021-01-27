@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from functools import lru_cache
-from app.api.routes import users
+from app.api.api_v1 import api
+from app.api.api_v1.endpoints import users
 from fastapi.exceptions import RequestValidationError
 from fastapi.exceptions import HTTPException
 from app import config
@@ -30,4 +31,4 @@ async def http_exception_handler(request, e):
     return await app_exception_handler(request, e)
 
 
-app.include_router(users.router)
+app.include_router(api.api_router)

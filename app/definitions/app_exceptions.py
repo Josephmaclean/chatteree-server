@@ -60,5 +60,5 @@ class AppException(object):
             Unauthorized
             :param context: extra dictionary object to give the error more context
             """
-            status_code = status.unauthorized
+            status_code = status.HTTP_401_UNAUTHORIZED
             AppExceptionCase.__init__(self, status_code, context)

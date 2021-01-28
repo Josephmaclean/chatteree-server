@@ -26,5 +26,9 @@ class MessageInDb(MessageInDbBase):
     deleted_at: datetime
 
 
+class Message(MessageInDbBase):
+    pass
+
+
 class MessageWithSender(MessageInDbBase):
     sender = [UserInDbBase]

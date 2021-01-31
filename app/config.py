@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     SENDGRID_API_KEY: str
+    API_V1_STR: str = "/api/v1"
 
     class Config:
         env_file = ".env"

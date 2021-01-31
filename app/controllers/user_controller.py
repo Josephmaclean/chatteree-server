@@ -1,11 +1,9 @@
 import random
 from datetime import timedelta, datetime
-from typing import Optional
+from typing import Optional, Dict, Union
 from fastapi.encoders import jsonable_encoder
-from jose import jwt
 
 from app.schemas.user_schema import UserCreate, UserConfirmOtp
-from app.schemas.jwt_schema import TokenData
 from app.controllers.main import AppController
 from app.definitions.service_result import ServiceResult
 from app.repositories.user_repository import UserRepository
@@ -37,8 +35,13 @@ class UserController(AppController):
     def send_mail(self, email, subject, message):
         EmailService().send_mail(email, subject, message)
 
-    def confirm_user(self, data: UserConfirmOtp):
-        db_user = UserRepository(self.db).find_by_id(data.id)
+    def confirm_user(self, data: Union[UserConfirmOtp, Dict]):
+        if isinstance(data, dict):
+            db_data = data
+        else:
+            db_data = data.dict()
+
+        db_user = UserRepository(self.db).find_by_id(db_data["id"])
 
         if not db_user:
             return ServiceResult(
@@ -48,7 +51,7 @@ class UserController(AppController):
             )
         otp_code = db_user.otp_code
 
-        if otp_code != data.otp_code:
+        if otp_code != db_data["otp_code"]:
             return ServiceResult(
                 AppException.Unauthorized(context={"message": "Wrong code"})
             )
@@ -61,7 +64,7 @@ class UserController(AppController):
             db_user.id, {"otp_code": "", "is_active": True}
         )
         access_token = create_access_token(
-            data={"sub": db_user.id},
+            data={"sub": str(db_user.id)},
             expires_at=timedelta(settings.ACCESS_TOKEN_EXPIRE_MINUTES),
         )
         return ServiceResult({"access_token": access_token, "token_type": "bearer"})

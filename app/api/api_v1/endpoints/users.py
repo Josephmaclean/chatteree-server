@@ -1,9 +1,11 @@
-from fastapi import APIRouter, Depends, BackgroundTasks
+from fastapi import APIRouter, Depends, BackgroundTasks, Header
+from fastapi.params import Form
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from app.api import deps
 from app.controllers.user_controller import UserController
 from app.schemas import user_schema
-from app.schemas import jwt_schema
+from app.schemas import token_schema
 from app.definitions.service_result import handle_result
 
 router = APIRouter()
@@ -22,10 +24,13 @@ async def create_user(
     return handle_result(result)
 
 
-@router.post("/confirm_otp", response_model=jwt_schema.Token)
+@router.post("/confirm_otp", response_model=token_schema.Token)
 async def confirm_otp(
-    data: user_schema.UserConfirmOtp, db: Session = Depends(dependency=deps.get_db)
+    id: int = Form(None, alias="id"),
+    otp_code: str = Form(None, alias="otp"),
+    db: Session = Depends(dependency=deps.get_db),
 ):
+    data = {"otp_code": otp_code, "id": id}
     result = UserController(db).confirm_user(data)
     return handle_result(result)
 
@@ -39,3 +44,13 @@ async def resend_otp(
     result = UserController(db, background_tasks=background_tasks).resend_otp(id)
 
     return handle_result(result)
+
+
+@router.patch("/", response_model=user_schema.User)
+async def update_user(
+    update_data: user_schema.User,
+    db: Session = Depends(dependency=deps.get_db),
+    current_user: user_schema.User = Depends(deps.DecodeToken(Header(None))),
+):
+    # return {"token": token}
+    pass

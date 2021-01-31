@@ -1,2 +1,2 @@
 from . import user_schema
-from . import jwt_schema
+from . import token_schema

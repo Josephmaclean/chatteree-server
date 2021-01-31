@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 from typing import Optional, Dict, Union
 from fastapi.encoders import jsonable_encoder
 
-from app.schemas.user_schema import UserCreate, UserConfirmOtp
+from app.schemas.user_schema import UserCreate, UserConfirmOtp, UserUpdate, User
 from app.controllers.main import AppController
 from app.definitions.service_result import ServiceResult
 from app.repositories.user_repository import UserRepository
@@ -92,3 +92,9 @@ class UserController(AppController):
         email = db_user.email
         subject = "Please confirm your email address"
         self.background_tasks.add_task(self.send_mail, email, subject, message)
+
+    def update_user(self, update_data: UserUpdate, current_user: User) -> ServiceResult:
+        user = UserRepository(self.db).update_by_id(
+            id=current_user.id, obj_in=update_data
+        )
+        return ServiceResult(user)

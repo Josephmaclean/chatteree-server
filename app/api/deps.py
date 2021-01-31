@@ -1,5 +1,5 @@
-from functools import lru_cache
 from typing import Generator
+from datetime import datetime
 
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
@@ -14,11 +14,6 @@ from app.db.session import SessionLocal
 from app.definitions.app_exceptions import AppException
 from app.definitions.service_result import ServiceResult
 from app.repositories.user_repository import UserRepository
-
-
-# reusable_oauth2 = OAuth2PasswordBearer(
-#     tokenUrl=f"{settings.API_V1_STR}/users/confirm_otp"
-# )
 
 
 def get_db() -> Generator:
@@ -44,6 +39,10 @@ class DecodeToken:
             raise AppException.Unauthorized(
                 context={"message": "Could not validate credential"}
             )
+        datetime_now = datetime.utcnow()
+        if datetime.fromtimestamp(payload["exp"]) < datetime_now:
+            raise AppException.Unauthorized(context={"message": "token has expired"})
+        # if datetime_now < token_data
         user = UserRepository(db).find_by_id(token_data.sub)
         if not user:
             raise AppException.ResourceDoesNotExist(

@@ -48,9 +48,10 @@ async def resend_otp(
 
 @router.patch("/", response_model=user_schema.User)
 async def update_user(
-    update_data: user_schema.User,
+    update_data: user_schema.UserUpdate,
     db: Session = Depends(dependency=deps.get_db),
     current_user: user_schema.User = Depends(deps.DecodeToken(Header(None))),
 ):
-    # return {"token": token}
-    pass
+    result = UserController(db).update_user(update_data, current_user)
+
+    return handle_result(result)

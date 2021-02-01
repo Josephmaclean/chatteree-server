@@ -7,7 +7,7 @@ from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app import security, schemas
-from app.config import settings
+from app.core.config import settings
 from app.db.session import SessionLocal
 from app.definitions.app_exceptions import AppException
 from app.repositories.user_repository import UserRepository

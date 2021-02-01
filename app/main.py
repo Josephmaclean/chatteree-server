@@ -3,7 +3,8 @@ from functools import lru_cache
 from app.api.api_v1 import api
 from fastapi.exceptions import RequestValidationError
 from fastapi.exceptions import HTTPException
-from app import config
+from fastapi.middleware.cors import CORSMiddleware
+from app.core import config
 from app.definitions.app_exceptions import app_exception_handler, AppExceptionCase
 
 
@@ -31,3 +32,21 @@ async def http_exception_handler(request, e):
 
 
 app.include_router(api.api_router, prefix=get_settings().API_V1_STR)
+
+
+def get_origins():
+    if get_settings().ALLOW_ORIGINS:
+        origins = get_settings().ALLOW_ORIGINS
+    else:
+        origins = ["http://localhost:8000"]
+
+    return origins
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=get_origins(),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

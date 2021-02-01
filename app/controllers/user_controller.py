@@ -1,6 +1,6 @@
 import random
-from datetime import timedelta, datetime
-from typing import Optional, Dict, Union
+from datetime import timedelta
+from typing import Dict, Union
 from fastapi.encoders import jsonable_encoder
 
 from app.schemas.user_schema import UserCreate, UserConfirmOtp, UserUpdate, User
@@ -10,7 +10,7 @@ from app.repositories.user_repository import UserRepository
 from app.definitions.app_exceptions import AppException
 from app.security.token import create_access_token
 from app.services.email_service import EmailService
-from app.config import settings
+from app.core.config import settings
 
 
 class UserController(AppController):

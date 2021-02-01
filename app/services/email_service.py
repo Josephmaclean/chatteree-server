@@ -1,7 +1,7 @@
 from app.definitions.services.email_service_interface import EmailServiceInterface
 from sendgrid.helpers.mail import Mail
 from sendgrid import SendGridAPIClient
-from app.config import settings
+from app.core.config import settings
 
 
 class EmailService(EmailServiceInterface):

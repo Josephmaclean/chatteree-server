@@ -1,18 +1,15 @@
 from typing import Generator
 from datetime import datetime
 
-from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends
 from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
-from starlette import status
 
-from app import config, security, models, schemas
+from app import security, schemas
 from app.config import settings
 from app.db.session import SessionLocal
 from app.definitions.app_exceptions import AppException
-from app.definitions.service_result import ServiceResult
 from app.repositories.user_repository import UserRepository
 
 

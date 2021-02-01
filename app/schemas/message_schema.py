@@ -26,6 +26,13 @@ class MessageInDb(MessageInDbBase):
     deleted_at: datetime
 
 
+class MessageCreate(MessageBase):
+    type: MessageTypeEnum
+    content: str
+    sender_id: int
+    chatroom_id: int
+
+
 class Message(MessageInDbBase):
     pass
 

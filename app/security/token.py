@@ -3,7 +3,7 @@ from typing import Optional
 
 from jose import jwt
 
-from app.config import settings
+from app.core.config import settings
 
 ALGORITHM = settings.JWT_ALGORITHM
 SECRET_KEY = settings.JWT_SECRET_KEY

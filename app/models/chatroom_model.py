@@ -14,6 +14,7 @@ class ChatRoom(Base):
     __tablename__ = "chatrooms"
 
     id = Column(Integer, primary_key=True, index=True, nullable=False)
+    name = Column(String)
     description = Column(String)
     image = Column(String)
     is_group_chat = Column(Boolean, nullable=False, default=False)

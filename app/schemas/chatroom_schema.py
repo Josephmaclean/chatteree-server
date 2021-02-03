@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, validator
 
@@ -26,6 +26,7 @@ class ChatroomInDb(ChatroomInDbBase):
 
 class ChatroomCreate(ChatroomBase):
     is_group_chat: bool = False
+    members: List[int]
 
     @validator("name")
     def name_exists(cls, v, values, **kwargs):

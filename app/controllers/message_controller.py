@@ -1,4 +1,4 @@
-from main import AppController
+from app.controllers.main import AppController
 from sqlalchemy.orm import Session
 from fastapi import BackgroundTasks
 

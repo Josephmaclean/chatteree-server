@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from typing import Union, Any, Dict
 from .main import BaseRepository
-from app.schemas.user_schema import UserCreate, UserInDb, UserUpdate, User
+from app.schemas.user_schema import UserInDb, User
 from app.models import user_model
 
 

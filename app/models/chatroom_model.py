@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Integer, Table, ForeignKey, Boolean, Date
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
-association_table = Table(
+chatroom_assoc_table = Table(
     "chatroom_users",
     Base.metadata,
     Column("chatroom_id", Integer, ForeignKey("chatrooms.id")),
@@ -20,4 +20,4 @@ class ChatRoom(Base):
     is_group_chat = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime(timezone=True), server_default=sql.func.now())
 
-    users = relationship("User", secondary=association_table, backref="chatrooms")
+    users = relationship("User", secondary=chatroom_assoc_table, backref="chatrooms")

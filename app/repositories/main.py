@@ -16,6 +16,13 @@ class DBSessionContext(object):
 
 class BaseRepository(DBSessionContext):
     def __init__(self, db: Session, model: Type[ModelType]):
+        """
+        Base class to be inherited by all repositories. This class comes with
+        base crud functionalities attached
+
+        :param db: Session - sqlachemy db session to be used for queries
+        :param model: base model of the class to be used for queries and returns
+        """
         super(BaseRepository, self).__init__(db)
         self.model = model
 

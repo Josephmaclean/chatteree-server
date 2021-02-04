@@ -1,8 +1,8 @@
-"""create messages chatroom user tables
+"""create messages, users and chatrooms tables
 
-Revision ID: cc5cc15ea2e5
+Revision ID: 373bf3b643fd
 Revises:
-Create Date: 2021-01-26 11:27:46.893218
+Create Date: 2021-02-04 00:43:05.245652
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "cc5cc15ea2e5"
+revision = "373bf3b643fd"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,6 +21,7 @@ def upgrade():
     op.create_table(
         "chatrooms",
         sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("name", sa.String(), nullable=True),
         sa.Column("description", sa.String(), nullable=True),
         sa.Column("image", sa.String(), nullable=True),
         sa.Column("is_group_chat", sa.Boolean(), nullable=False),
@@ -37,7 +38,7 @@ def upgrade():
         "users",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("email", sa.String(), nullable=False),
-        sa.Column("username", sa.String(), nullable=False),
+        sa.Column("username", sa.String(), nullable=True),
         sa.Column("image", sa.String(), nullable=True),
         sa.Column("is_active", sa.Boolean(), nullable=False),
         sa.Column("otp_code", sa.String(), nullable=True),
@@ -57,15 +58,23 @@ def upgrade():
         "chatroom_users",
         sa.Column("chatroom_id", sa.Integer(), nullable=True),
         sa.Column("user_id", sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(["chatroom_id"], ["chatrooms.id"]),
-        sa.ForeignKeyConstraint(["user_id"], ["users.id"]),
+        sa.ForeignKeyConstraint(
+            ["chatroom_id"],
+            ["chatrooms.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["user_id"],
+            ["users.id"],
+        ),
     )
     op.create_table(
         "messages",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column(
             "type",
-            sa.Enum("text", "images", "audio", "video", "document", name="messagetypes"),
+            sa.Enum(
+                "text", "images", "audio", "video", "document", name="messagetypeenum"
+            ),
             nullable=False,
         ),
         sa.Column("content", sa.String(), nullable=False),
@@ -78,8 +87,14 @@ def upgrade():
             nullable=True,
         ),
         sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
-        sa.ForeignKeyConstraint(["chatroom_id"], ["chatrooms.id"]),
-        sa.ForeignKeyConstraint(["sender_id"], ["users.id"]),
+        sa.ForeignKeyConstraint(
+            ["chatroom_id"],
+            ["chatrooms.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["sender_id"],
+            ["users.id"],
+        ),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_messages_id"), "messages", ["id"], unique=False)

@@ -20,4 +20,9 @@ class ChatRoom(Base):
     is_group_chat = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime(timezone=True), server_default=sql.func.now())
 
-    users = relationship("User", secondary=chatroom_assoc_table, backref="chatrooms")
+    users = relationship(
+        "User",
+        secondary=chatroom_assoc_table,
+        backref="chatrooms",
+        cascade="all, delete",
+    )

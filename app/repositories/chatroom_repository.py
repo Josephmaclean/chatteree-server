@@ -37,6 +37,3 @@ class ChatroomRepository(BaseRepository):
             raise AppException.ResourceDoesNotExist(context={"message": str(e.orig)})
         except Exception:
             raise AppException.CreateResource()
-
-
-'insert or update on table "chatroom_users" violates foreign key constraint "chatroom_users_user_id_fkey"\nDETAIL:  Key (user_id)=(2) is not present in table "users".\n'

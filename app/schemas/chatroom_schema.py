@@ -34,6 +34,12 @@ class ChatroomCreate(ChatroomBase):
             raise ValueError("name is required for a group chat")
         return v
 
+    @validator("members")
+    def has_right_members(cls, v, values, **kwargs):
+        if values["is_group_chat"] is False and len(v) > 2:
+            raise ValueError("group chat needs to have move than 1 member")
+        return v
+
 
 class Chatroom(ChatroomInDbBase):
     pass
